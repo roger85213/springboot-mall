@@ -1,6 +1,7 @@
 package com.roger.springbootmall.service;
 
 import com.roger.springbootmall.constant.ProductCategory;
+import com.roger.springbootmall.dto.ProductQueryParams;
 import com.roger.springbootmall.dto.ProductRequest;
 import com.roger.springbootmall.model.Product;
 
@@ -8,8 +9,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    List<Product> getProduct(ProductCategory category,
-                             String search);
+    List<Product> getProduct(ProductQueryParams productQueryParams);
 
     Product getProductById(Integer productId);
 
