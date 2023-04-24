@@ -3,7 +3,11 @@ package com.roger.springbootmall.service;
 import com.roger.springbootmall.dto.ProductRequest;
 import com.roger.springbootmall.model.Product;
 
+import java.util.List;
+
 public interface ProductService {
+
+    List<Product> getProduct();
 
     Product getProductById(Integer productId);
 
@@ -12,5 +16,7 @@ public interface ProductService {
     void updateProduct (Integer productId, ProductRequest productRequest);
 
     void deleteProductById(Integer productId);
+
+
 
 }
