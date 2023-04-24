@@ -5,6 +5,7 @@ import com.roger.springbootmall.dto.ProductQueryParams;
 import com.roger.springbootmall.dto.ProductRequest;
 import com.roger.springbootmall.model.Product;
 import com.roger.springbootmall.service.ProductService;
+import com.roger.springbootmall.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class ProductController {
 
     @GetMapping("/products")
 
-    public ResponseEntity<List<Product>> getProducts(
+    public ResponseEntity<Page<Product>> getProducts(
 
             //查詢條件
             @RequestParam(required = false) ProductCategory category,
@@ -45,10 +46,21 @@ public class ProductController {
         productQueryParams.setSort(sort);
         productQueryParams.setLimit(limit);
         productQueryParams.setOffset(offset);
-
+        //取得商品列表
         List<Product> productList = productService.getProduct(productQueryParams);
 
-        return ResponseEntity.status(HttpStatus.OK).body(productList);
+        //取得商品總數
+        Integer total = productService.countProduct(productQueryParams);
+
+        //如果要顯示商品總比數的話去new一個新class出來
+        Page<Product> page = new Page<>();
+        page.setLimit(limit);
+        page.setOffset(offset);
+        page.setTotal(total);
+        page.setResults(productList);
+
+        //如果沒有商品總比數的話.body(productList)
+        return ResponseEntity.status(HttpStatus.OK).body(page);
 
     }
 
