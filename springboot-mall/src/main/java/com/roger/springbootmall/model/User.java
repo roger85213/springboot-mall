@@ -1,12 +1,18 @@
 package com.roger.springbootmall.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 public class User {
 
     private Integer userId;
-
+    //將回傳值改變形式從email改為e_mail
+    @JsonProperty("e_mail")
     private String email;
+    //隱藏回傳值
+    @JsonIgnore
 
     private String password;
 
