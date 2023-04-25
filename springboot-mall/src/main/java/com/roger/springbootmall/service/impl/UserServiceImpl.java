@@ -1,6 +1,7 @@
 package com.roger.springbootmall.service.impl;
 
 import com.roger.springbootmall.dao.UserDao;
+import com.roger.springbootmall.dto.UserLoginRequest;
 import com.roger.springbootmall.dto.UserRegisterRequest;
 import com.roger.springbootmall.model.User;
 import com.roger.springbootmall.service.UserService;
@@ -38,5 +39,21 @@ public class UserServiceImpl implements UserService {
         }
 
         return userDao.createUser(userRegisterRequest);
+    }
+
+    @Override
+    public User login(UserLoginRequest userLoginRequest) {
+        User user = userDao.getUserByEmail(userLoginRequest.getEmail());
+
+        if (user == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        if (user.getPassword().equals(userLoginRequest.getPassword())){
+
+            return user;
+        }else {
+
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 }

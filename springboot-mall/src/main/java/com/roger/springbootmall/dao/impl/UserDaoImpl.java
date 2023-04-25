@@ -1,6 +1,7 @@
 package com.roger.springbootmall.dao.impl;
 
 import com.roger.springbootmall.dao.UserDao;
+import com.roger.springbootmall.dto.UserLoginRequest;
 import com.roger.springbootmall.dto.UserRegisterRequest;
 import com.roger.springbootmall.model.User;
 import com.roger.springbootmall.rowmapper.UserRowMapper;
@@ -13,10 +14,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Component
@@ -84,4 +82,6 @@ public class UserDaoImpl implements UserDao {
         int userId = keyHolder.getKey( ).intValue();
         return userId;
     }
+
+
 }
