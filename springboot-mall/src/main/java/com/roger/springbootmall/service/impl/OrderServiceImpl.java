@@ -4,6 +4,7 @@ import com.roger.springbootmall.dao.OrderDao;
 import com.roger.springbootmall.dao.ProductDao;
 import com.roger.springbootmall.dto.BuyItem;
 import com.roger.springbootmall.dto.CreateOrderRequest;
+import com.roger.springbootmall.model.Order;
 import com.roger.springbootmall.model.OrderItem;
 import com.roger.springbootmall.model.Product;
 import com.roger.springbootmall.service.OrderService;
@@ -54,5 +55,19 @@ public class OrderServiceImpl implements OrderService {
 
             return orderId;
 
+    }
+
+    @Override
+    public Order getOrderById(Integer orderId) {
+
+        Order order = orderDao.getOrderById(orderId);
+
+        List<OrderItem> orderItemList = orderDao.getOrderItemById(orderId);
+
+        //合併，將oderItemList的數據合併到order裏面，需要在Order裡面多創立一個list
+
+        order.setOrderItemList(orderItemList);
+
+        return order;
     }
 }

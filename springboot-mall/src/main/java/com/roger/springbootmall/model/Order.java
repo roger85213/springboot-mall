@@ -1,6 +1,7 @@
 package com.roger.springbootmall.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Order {
 
@@ -13,6 +14,16 @@ public class Order {
     private Date createdDate;
 
     private Date lastModifiedDate;
+    //合併兩筆資料用
+    private List<OrderItem> orderItemList;
+
+    public List<OrderItem> getOrderItemList() {
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
+    }
 
     public Integer getOrderId() {
         return orderId;
