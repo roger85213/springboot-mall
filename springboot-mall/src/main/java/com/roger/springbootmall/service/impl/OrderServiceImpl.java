@@ -2,15 +2,20 @@ package com.roger.springbootmall.service.impl;
 
 import com.roger.springbootmall.dao.OrderDao;
 import com.roger.springbootmall.dao.ProductDao;
+import com.roger.springbootmall.dao.UserDao;
 import com.roger.springbootmall.dto.BuyItem;
 import com.roger.springbootmall.dto.CreateOrderRequest;
 import com.roger.springbootmall.model.Order;
 import com.roger.springbootmall.model.OrderItem;
 import com.roger.springbootmall.model.Product;
+import com.roger.springbootmall.model.User;
 import com.roger.springbootmall.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +26,9 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
     @Autowired
     private ProductDao productDao;
+
+    @Autowired
+    private UserDao userDao;
 
     @Transactional//修改多個table時使用，確保同時進行
 
@@ -33,12 +41,29 @@ public class OrderServiceImpl implements OrderService {
 
         List<OrderItem> orderItemList = new ArrayList<>();
 
+
+        User user = userDao.getUserId(userId);
+        if (user == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
         int totalAmount = 0;
 
         //for循環次數用法:把itemList裡面的值都打印出來,格式為BuyItem
         for (BuyItem buyItem : createOrderRequest.getBuyItemList()) {
 
             Product product = productDao.getProductById(buyItem.getProductId());
+            //檢查庫存是否足夠
+            if (product == null){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }else if (product.getStock() < buyItem.getQuantity()){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+
+            //扣除庫存 dao層裡的stock參數等於product.getStock() - buyItem.getQuantity()
+            productDao.updateStock(product.getProductId(), product.getStock() - buyItem.getQuantity());
+
+
             int amount = buyItem.getQuantity() * product.getPrice();
             totalAmount = totalAmount + amount;
 
