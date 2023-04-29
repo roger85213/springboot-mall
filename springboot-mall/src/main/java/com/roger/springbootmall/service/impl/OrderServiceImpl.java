@@ -5,6 +5,7 @@ import com.roger.springbootmall.dao.ProductDao;
 import com.roger.springbootmall.dao.UserDao;
 import com.roger.springbootmall.dto.BuyItem;
 import com.roger.springbootmall.dto.CreateOrderRequest;
+import com.roger.springbootmall.dto.OrderQueryParams;
 import com.roger.springbootmall.model.Order;
 import com.roger.springbootmall.model.OrderItem;
 import com.roger.springbootmall.model.Product;
@@ -94,5 +95,25 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderItemList(orderItemList);
 
         return order;
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        List<Order> orderList = orderDao.getOrders(orderQueryParams);
+        //for loop 的用法是利用orderList方法從order table 根據orderDao.getOrders方法得到的orderId去找
+        //order_item table裡面符合orderId的數據，因為每一個userId有很多orderId所以要用for loop
+        //先找order_item table裡的第一筆orderId的值，在找第二筆，以此類推。
+        for (Order order : orderList){
+            List<OrderItem> orderItemList = orderDao.getOrderItemById(order.getOrderId());
+
+            order.setOrderItemList(orderItemList);
+        }
+
+        return orderList;
+    }
+
+    @Override
+    public Integer countOrders(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrders(orderQueryParams);
     }
 }

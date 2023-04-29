@@ -1,5 +1,6 @@
 package com.roger.springbootmall.dao;
 
+import com.roger.springbootmall.dto.OrderQueryParams;
 import com.roger.springbootmall.model.Order;
 import com.roger.springbootmall.model.OrderItem;
 
@@ -14,4 +15,11 @@ public interface OrderDao {
     Order getOrderById(Integer orderId);
 
     List<OrderItem> getOrderItemById(Integer orderId);
+
+    Integer countOrders (OrderQueryParams orderQueryParams);
+
+    List<Order> getOrders(OrderQueryParams orderQueryParams);
+
+
+
 }
